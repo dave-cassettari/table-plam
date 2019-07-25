@@ -55,7 +55,10 @@
                     'Tom Coleman',
                     'Paul Hardy',
                     'Alex Davies',
-                    'Charlotte Davies (NR)',
+                    {
+                        name: 'Charlotte Davies',
+                        diet: 'NR',
+                    },
                     'Kate Slater',
                     'Shane Davison',
                     'Martin Au',
@@ -82,7 +85,10 @@
                 people: [
                     'Jess Carter',
                     'Alex Carter',
-                    'Billy Davies (N)',
+                    {
+                        name: 'Billy Davies',
+                        diet: 'N',
+                    },
                     'Sophie Davies',
                     'Liv Tenberg',
                     'Charlie Baker',
@@ -110,11 +116,23 @@
                 people: [
                     'Steffen Hoyemsvoll',
                     'Simone Girardeau',
-                    'Dhiren Vekaria (V)',
-                    'Dimple Patel (V)',
+                    {
+                        name: 'Dhiren Vekaria',
+                        diet: 'V',
+                    },
+                    {
+                        name: 'Dimple Patel',
+                        diet: 'V',
+                    },
                     'Davey Mathew',
-                    'Daniella de Santos (V)',
-                    'Charlotte Hussey (V)',
+                    {
+                        name: 'Daniella de Santos',
+                        diet: 'V',
+                    },
+                    {
+                        name: 'Charlotte Hussey',
+                        diet: 'V',
+                    },
                 ]
             },
             {
@@ -123,7 +141,10 @@
                 name: 'Games',
                 people: [
                     'Mike Winstanley',
-                    'Jess Ashley (V)',
+                    {
+                        name: 'Jess Ashley',
+                        diet: 'V',
+                    },
                     'Rachel Lishman',
                     'Hugh O\'Connell',
                     'Robbie Hernandez',
@@ -150,12 +171,24 @@
                 col: 1,
                 name: 'Italy',
                 people: [
-                    'Galla Cassettari (V)',
+                    {
+                        name: 'Galla Cassettari',
+                        diet: 'V',
+                    },
                     'Nick Barnard',
-                    'Lucy Barnard (N)',
-                    'Sophie Barnard (N)',
+                    {
+                        name: 'Lucy Barnard',
+                        diet: 'N',
+                    },
+                    {
+                        name: 'Sophie Barnard',
+                        diet: 'N',
+                    },
                     'Barbara Chadwick',
-                    'Piera Cassettari (V)',
+                    {
+                        name: 'Piera Cassettari',
+                        diet: 'V',
+                    },
                     'Giulio Cassettari',
                     'Marie-Louise Sharpin',
                 ]
@@ -168,7 +201,10 @@
                     'Haran Rajkumar',
                     'Tom Carpenter',
                     'Jonny Darley',
-                    'Sophie Williams (GF)',
+                    {
+                        name: 'Sophie Williams',
+                        diet: 'GF',
+                    },
                     'Laura Stevenson',
                     'James Ashbourne',
                     'Fraz Fletcher',
@@ -180,6 +216,7 @@
         var PI2 = Math.PI * 2,
             map = draw = SVG('container'),
             body = document.getElementById('body'),
+            showDiet = false,
             container = document.getElementById('container'),
             fontTable = '2em \'French Script MT\'',
             fontPerson = '1em Verdana';
@@ -272,7 +309,30 @@
                 var angle = seatAngle * personIndex++,
                     textX = x + (personRadius * Math.cos(offset + angle)) * width * 1.1,
                     textY = y + (personRadius * Math.sin(offset + angle)) * height + tableDepth * 0.25,
+                    text,
+                    name,
+                    diet,
                     anchor;
+
+                if (typeof person === 'string')
+                {
+                    name = person;
+                    diet = null;
+                }
+                else
+                {
+                    name = person.name;
+                    diet = person.diet;
+                }
+
+                if (showDiet && diet !== null)
+                {
+                    text = name + ' (' + diet + ')';
+                }
+                else
+                {
+                    text = name;
+                }
 
                 if (Math.abs(textX - x) < 0.1)
                 {
@@ -295,7 +355,7 @@
                 }
 
                 draw
-                    .text(person)
+                    .text(text)
                     .font({ anchor: anchor, size: '1.25em', family: 'Verdana', fill: '#595d6e' })
                     .x(Math.round(textX))
                     .cy(Math.round(textY));
