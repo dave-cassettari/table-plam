@@ -198,10 +198,10 @@
             colWidth = svgWidth / maxCol,
             rowHeight = svgHeight / maxRow,
             minGridSize = Math.min(colWidth, rowHeight),
-            tableDepth = 30,
+            tableDepth = 50,
             tableRadius = 0.6 * minGridSize,
             perspective = 0.8,
-            personRadius = 0.4 * minGridSize,
+            personRadius = 0.375 * minGridSize,
             personOffset = Math.PI + Math.PI / 2,
             strokeWidth = 2,
             halfStroke = strokeWidth / 2,
@@ -296,7 +296,7 @@
 
                 draw
                     .text(person)
-                    .font({ anchor: anchor, size: '1em', family: 'Verdana', fill: '#595d6e' })
+                    .font({ anchor: anchor, size: '1.25em', family: 'Verdana', fill: '#595d6e' })
                     .x(Math.round(textX))
                     .cy(Math.round(textY));
             }
