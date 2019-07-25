@@ -1,0 +1,308 @@
+﻿<!doctype html>
+<html class="no-js" lang="">
+<head id="html">
+    <meta charset="utf-8">
+    <title>Table Plan</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <meta name="theme-color" content="#fafafa">
+
+    <script src="scripts/svg-2.7.1.js"></script>
+    <script src="scripts/svg.path-0.6.0.js"></script>
+</head>
+
+<body id="body">
+
+    <div id="header">
+        <h2>3<sup>rd</sup> August 2019</h2>
+        <h1>Tiphany &amp; David</h1>
+        <h3>Chateau Thugny-Trugny</h3>
+    </div>
+
+    <div id="container"></div>
+
+    <script>
+
+        var plan = [
+            {
+                row: 0,
+                col: 1,
+                name: 'Champagne',
+                width: 2,
+                offset: Math.PI / 2,
+                people: [
+                    '',
+                    'Jean-Baptiste Perrin',
+                    'Solange Perrez',
+                    '', //'Tiphany Cassettari',
+                    '', //'David Cassettari',
+                    'Emily Capes',
+                    'James Carter',
+                ]
+            },
+            {
+                row: 1,
+                col: 0,
+                name: 'Dalmatian',
+                people: [
+                    'Tom Coleman',
+                    'Paul Hardy',
+                    'Alex Davies',
+                    'Charlotte Davies (NR)',
+                    'Kate Slater',
+                    'Shane Davison',
+                    'Martin Au',
+                ]
+            },
+            {
+                row: 1,
+                col: 1,
+                name: 'Tasty',
+                people: [
+                    'Seppe Cassettari',
+                    'Sylvia Cassettari',
+                    'Sue Davies',
+                    'Evan Davies',
+                    'Gemma Cassettari',
+                    'James Grey',
+                ]
+            },
+            {
+                row: 1,
+                col: 2,
+                name: '40k',
+                offset: Math.PI - Math.PI / 14,
+                people: [
+                    'Jess Carter',
+                    'Alex Carter',
+                    'Billy Davies (N)',
+                    'Sophie Davies',
+                    'Liv Tenberg',
+                    'Charlie Baker',
+                    'Harry Robbins',
+                ]
+            },
+            {
+                row: 2,
+                col: 0,
+                name: 'Garden',
+                people: [
+                    'Sarah Caulfield',
+                    'Emily Brady',
+                    'Anna Dworecka',
+                    'Claire Ball',
+                    'Nick Ball',
+                    'Gareth Jones',
+                    'Rose Edmonds',
+                ]
+            },
+            {
+                row: 2,
+                col: 1,
+                name: 'Fantasy',
+                people: [
+                    'Steffen Hoyemsvoll',
+                    'Simone Girardeau',
+                    'Dhiren Vekaria (V)',
+                    'Dimple Patel (V)',
+                    'Davey Mathew',
+                    'Daniella de Santos (V)',
+                    'Charlotte Hussey (V)',
+                ]
+            },
+            {
+                row: 2,
+                col: 2,
+                name: 'Games',
+                people: [
+                    'Mike Winstanley',
+                    'Jess Ashley (V)',
+                    'Rachel Lishman',
+                    'Hugh O\'Connell',
+                    'Robbie Hernandez',
+                    'Angharad Cousins',
+                    'Hamilton Keats',
+                    'Alex Cowan',
+                ]
+            },
+            {
+                row: 3,
+                col: 0,
+                name: 'France',
+                people: [
+                    'Etienne Lecureux',
+                    'Vanina',
+                    'Mathilde Fox',
+                    'Helen Kirkpatrick',
+                    'Celine Pasquié',
+                    'Julie',
+                ]
+            },
+            {
+                row: 3,
+                col: 1,
+                name: 'Italy',
+                people: [
+                    'Galla Cassettari (V)',
+                    'Nick Barnard',
+                    'Lucy Barnard (N)',
+                    'Sophie Barnard (N)',
+                    'Barbara Chadwick',
+                    'Piera Cassettari (V)',
+                    'Giulio Cassettari',
+                    'Marie-Louise Sharpin',
+                ]
+            },
+            {
+                row: 3,
+                col: 2,
+                name: 'Cheese',
+                people: [
+                    'Haran Rajkumar',
+                    'Tom Carpenter',
+                    'Jonny Darley',
+                    'Sophie Williams (GF)',
+                    'Laura Stevenson',
+                    'James Ashbourne',
+                    'Fraz Fletcher',
+                    'Anshie Patel',
+                ]
+            }
+        ];
+
+        var PI2 = Math.PI * 2,
+            map = draw = SVG('container'),
+            body = document.getElementById('body'),
+            container = document.getElementById('container'),
+            fontTable = '2em \'French Script MT\'',
+            fontPerson = '1em Verdana';
+
+        var maxRow = 1,
+            maxCol = 1;
+
+        for (let table of plan)
+        {
+            maxRow = Math.max(maxRow, table.row + 1);
+            maxCol = Math.max(maxCol, table.col + 1);
+        }
+
+        var svgWidth = container.clientWidth,
+            svgHeight = container.clientHeight,
+            colWidth = svgWidth / maxCol,
+            rowHeight = svgHeight / maxRow,
+            minGridSize = Math.min(colWidth, rowHeight),
+            tableDepth = 30,
+            tableRadius = 0.6 * minGridSize,
+            perspective = 0.8,
+            personRadius = 0.4 * minGridSize,
+            personOffset = Math.PI + Math.PI / 2,
+            strokeWidth = 2,
+            halfStroke = strokeWidth / 2,
+            skirtRaise = 0.6,
+            skirtSpread = 1.0,
+            startSkirtT = 3 * Math.PI / 2,
+            finishSkirtT = Math.PI / 2;
+
+        draw.viewbox(0, 0, svgWidth, svgHeight)
+
+        for (let table of plan)
+        {
+            var x = table.col * colWidth + colWidth / 2,
+                y = table.row * rowHeight + rowHeight / 2,
+                width = table.width || 1,
+                height = table.height || 1,
+                offset = table.offset || personOffset,
+                people = table.people,
+                seatAngle = PI2 / people.length,
+                tableWidth = tableRadius * width,
+                tableHeight = tableRadius * height * perspective,
+                skirtRadius = tableRadius / 2,
+                personIndex = 0,
+                startSkirtX = x - tableWidth / 2,
+                lastSkirtX = x - tableWidth / 2 * skirtSpread,
+                lastSkirtY = y + tableDepth,
+                skirtPath = draw
+                    .path()
+                    .M(startSkirtX, y);
+
+            for (var skirtAngle = startSkirtT; skirtAngle >= finishSkirtT; skirtAngle -= Math.PI / 6)
+            {
+                var skirtX = x + (skirtRadius * Math.cos(personOffset + skirtAngle)) * width * skirtSpread,
+                    skirtY = y + (skirtRadius * Math.sin(personOffset + skirtAngle)) * height * skirtRaise + tableDepth,
+                    controlX = (skirtX + lastSkirtX) / 2,
+                    controlY = Math.min(skirtY, lastSkirtY) - 2;
+
+                skirtPath
+                    .Q({ x: controlX, y: controlY }, { x: skirtX, y: skirtY })
+                    .L({ x: skirtX, y: skirtY - tableDepth })
+                    .L({ x: skirtX, y: skirtY });
+
+                lastSkirtX = skirtX;
+                lastSkirtY = skirtY;
+            }
+
+            skirtPath
+                .L(x + tableWidth / 2, y)
+                .fill('#fff')
+                .stroke({ width: 2, color: '#eee' })
+                .clear();
+
+            draw
+                .ellipse(tableWidth, tableHeight)
+                .stroke({ width: 2, color: '#eee' })
+                .fill('#fff')
+                .cx(Math.round(x))
+                .cy(Math.round(y));
+
+            draw
+                .text(table.name)
+                .font({ anchor: 'middle', size: '2em', family: 'French Script MT', fill: '#48465b' })
+                .x(Math.round(x))
+                .cy(Math.round(y));
+
+            for (let person of people)
+            {
+                var angle = seatAngle * personIndex++,
+                    textX = x + (personRadius * Math.cos(offset + angle)) * width * 1.1,
+                    textY = y + (personRadius * Math.sin(offset + angle)) * height + tableDepth * 0.25,
+                    anchor;
+
+                if (Math.abs(textX - x) < 0.1)
+                {
+                    anchor = 'middle';
+                }
+                else
+                {
+                    if (textX > x)
+                    {
+                        anchor = 'start';
+                    }
+                    else
+                    {
+                        anchor = 'end';
+                    }
+
+                    var yFactor = (people.length == 8) ? 0.25 : 0.1;
+
+                    textY -= (textY - y) * yFactor;
+                }
+
+                draw
+                    .text(person)
+                    .font({ anchor: anchor, size: '1em', family: 'Verdana', fill: '#595d6e' })
+                    .x(Math.round(textX))
+                    .cy(Math.round(textY));
+            }
+        }
+
+    </script>
+
+</body>
+</html>
