@@ -1,7 +1,6 @@
 html {
     width: 594mm;
     height: 420mm;
-    background: transparent;
 }
 
 body {
@@ -14,7 +13,6 @@ body {
     /*background: url('../images/transparent.png') -2px -2px;*/
     /*background: url('../images/background.jpg');*/
     background: transparent;
-    overflow: hidden;
 }
 
 h1,
@@ -41,6 +39,7 @@ h3 {
 }
 
 #header {
+    padding: 2em 0 0;
     display: flex;
     align-items: stretch;
     flex-direction: row;
@@ -48,7 +47,7 @@ h3 {
 
 #container {
     flex: 1;
-    margin: -2em 0 2em;
+    margin: -2em 0 4em;
     position: relative;
     vertical-align: middle;
 }
@@ -56,16 +55,4 @@ h3 {
 svg {
     width: 100% !important;
     height: auto !important;
-}
-
-@page {
-    size: 29.7cm 21cm;
-    margin: 30mm 45mm 30mm 45mm;
-}
-
-@media print {
-    body {
-        padding-top: 7em;
-        /*background: none;*/
-    }
 }
