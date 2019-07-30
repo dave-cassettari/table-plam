@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html,
+        body {
+            width: 1000px;
+            height: 800px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .map {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 50px;
+            border: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="map" id="map1"></div>
+    <div class="map" id="map2"></div>
+
+    <script>
+
+        var styles = [
+            {
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#93817c"
+                    }
+                ]
+            },
+            {
+                "featureType": "road",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#fdfcf8"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#f5fbe6"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#f8c967"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#e9bc62"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway.controlled_access",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#e98d58"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway.controlled_access",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#db8555"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#b4a59e"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#8f7d77"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.line",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#ebe3cd"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit.station",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#dfd2ae"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#b9d3c2"
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#92998d"
+                    }
+                ]
+            }
+        ];
+
+        function addMarker(map, text, url, lat, lng, size)
+        {
+            size = size || 40;
+
+            new google.maps.Marker({
+                map: map,
+                icon: {
+                    url: url,
+                    anchor: new google.maps.Point(size / 2, size),
+                    scaledSize: new google.maps.Size(size, size),
+                    labelOrigin: new google.maps.Point(size / 2, size + 20),
+                },
+                label: {
+                    text: text,
+                    color: '#33333',
+                    fontWeight: 'bold',
+                },
+                position: { lat: lat, lng: lng },
+            });
+        }
+
+        function initMap()
+        {
+            var container1 = document.getElementById('map1'),
+                container2 = document.getElementById('map2'),
+                parking = [
+                    { lat: 49.51125, lng: 4.3666 },
+                    { lat: 49.51123, lng: 4.3662 },
+                    { lat: 49.51039, lng: 4.36778 },
+                    { lat: 49.51029, lng: 4.3676 },
+                ],
+                map1 = new google.maps.Map(container1, {
+                    zoom: 19,
+                    styles: styles,
+                    center: { lat: 49.5109, lng: 4.3668 },
+                    disableDefaultUI: true,
+                }),
+                map2 = new google.maps.Map(container2, {
+                    zoom: 16,
+                    styles: styles,
+                    center: { lat: 49.485024, lng: 4.411767 },
+                    disableDefaultUI: true,
+                });
+
+            addMarker(map1, 'Église catholique Saint Nicolas', 'images/church.svg', 49.5114, 4.3664, 50);
+
+            var icon = {
+                url: "images/parking.svg",
+                anchor: new google.maps.Point(20, 40),
+                scaledSize: new google.maps.Size(40, 40)
+            }
+
+            for (let park of parking)
+            {
+                new google.maps.Marker({
+                    map: map1,
+                    icon: icon,
+                    position: park,
+                });
+            }
+
+            addMarker(map2, 'Château de Thugny-Trugny', 'images/castle.svg', 49.485758, 4.419327);
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDA0Kkc3x2fF1ApvNqPNIzLNEq17yrDj9g&callback=initMap">
+    </script>
+</body>
+</html>
